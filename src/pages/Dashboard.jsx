@@ -12,7 +12,7 @@ export default function Dashboard() {
   return (
    <>
    <Header/>
-   <Filter onFilter={(filters) => console.log(filters)}/>
+   {/* <Filter onFilter={(filters) => console.log(filters)}/> */}
    <Outlet/>
    <Footer/>
    </>

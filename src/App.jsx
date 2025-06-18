@@ -14,10 +14,10 @@ const JobDetails = lazy(() => import('./pages/JobDetails'));
 
 // Custom loader
 import Loader from './components/skeleton/Loader';
+import About from './pages/About';
 
 const App = () => {
   const dispatch = useDispatch();
-  const { user } = useSelector((state) => state.auth);
 
   useEffect(() => {
     dispatch(verifyMe());
@@ -31,7 +31,9 @@ const App = () => {
             <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
             <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>}>
               <Route index element={<JobList />} />
-              <Route path="job/:id" element={<JobDetails />} />
+              <Route path="/jobs" element={<JobList />} />
+              <Route path="/jobs/:id" element={<JobDetails />} />
+              <Route path="/about" element={<About />} />
             </Route>
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>

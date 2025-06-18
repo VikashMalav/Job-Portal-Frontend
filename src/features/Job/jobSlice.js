@@ -10,6 +10,7 @@ export const getJobs = createAsyncThunk("/jobs/jobList", async (_, { rejectWithV
 })
 export const getJobById = createAsyncThunk("/jobs/getJobId", async (id, { rejectWithValue }) => {
     try {
+        console.log("calling")
         const res = await axiosInstance.get(`/jobs/${id}`)
         return res.data
     } catch (error) {
