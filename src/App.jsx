@@ -11,10 +11,10 @@ const ProtectedRoute = lazy(() => import('./pages/auth/ProtectedRoute'));
 const PublicRoute = lazy(() => import('./pages/auth/PublicRoute'));
 const JobList = lazy(() => import('./pages/JobList'));
 const JobDetails = lazy(() => import('./pages/JobDetails'));
-
+const About = lazy(() => import('./pages/About'))
 // Custom loader
 import Loader from './components/skeleton/Loader';
-import About from './pages/About';
+
 
 const App = () => {
   const dispatch = useDispatch();

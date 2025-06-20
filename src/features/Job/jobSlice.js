@@ -10,8 +10,17 @@ export const getJobs = createAsyncThunk("/jobs/jobList", async (_, { rejectWithV
 })
 export const getJobById = createAsyncThunk("/jobs/getJobId", async (id, { rejectWithValue }) => {
     try {
-        console.log("calling")
+       
         const res = await axiosInstance.get(`/jobs/${id}`)
+        return res.data
+    } catch (error) {
+        return rejectWithValue(error)
+    }
+})
+export const jobSearch = createAsyncThunk(`/jobs/jobSearch`, async (q, { rejectWithValue }) => {
+    try {
+        console.log("calling search")
+        const res = await axiosInstance.get(`/jobs/search/q=${q}`)
         return res.data
     } catch (error) {
         return rejectWithValue(error)
@@ -23,6 +32,7 @@ const jobSlice = createSlice({
     initialState: {
         jobList: [],
         selectedJob: null,
+        searchList:[],
         loading: false,
         error: null
     },
@@ -54,6 +64,14 @@ const jobSlice = createSlice({
                 state.selectedJob = action.payload.job
             })
             .addCase(getJobById.rejected, (state, action) => {
+                state.loading = false
+                state.error = action.payload
+            })
+            .addCase(jobSearch.fulfilled, (state, action) => {
+                state.loading = false
+                state.searchList = action.payload.searchResult
+            })
+            .addCase(jobSearch.rejected, (state, action) => {
                 state.loading = false
                 state.error = action.payload
             })

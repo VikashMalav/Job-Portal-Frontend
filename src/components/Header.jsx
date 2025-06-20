@@ -4,10 +4,10 @@ import { Briefcase, Menu, X, LogOut, Search } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { logoutUser } from '../features/auth/authSlice';
 import { toast } from 'react-toastify';
+import SearchBar from './SearchBar';
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [query, setQuery] = useState('');
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
@@ -18,13 +18,7 @@ const Header = () => {
     navigate('/login');
   };
 
-  const handleSearch = (e) => {
-    e.preventDefault();
-    if (query.trim()) {
-      navigate(`/jobs?search=${query}`);
-      setQuery('');
-    }
-  };
+
 
   const navItems = [
     { label: 'Home', path: '/' },
@@ -46,24 +40,7 @@ const Header = () => {
         </NavLink>
 
         {/* Search Bar - Desktop */}
-        <form
-          onSubmit={handleSearch}
-          className="hidden md:flex flex-1 max-w-md mx-4 relative"
-        >
-          <input
-            type="text"
-            placeholder="Search jobs..."
-            className="w-full py-1.5 pl-4 pr-10 rounded-full text-sm bg-white border border-gray-300 text-gray-800 focus:outline-none focus:ring-2 focus:ring-pink-400"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-          />
-          <button
-            type="submit"
-            className="absolute right-2 top-1/2 -translate-y-1/2 text-pink-600 hover:text-indigo-600"
-          >
-            <Search size={18} />
-          </button>
-        </form>
+        <SearchBar />
 
         {/* Desktop Nav */}
         <nav className="hidden md:flex items-center gap-5 text-sm">
@@ -72,8 +49,7 @@ const Header = () => {
               key={path}
               to={path}
               className={({ isActive }) =>
-                `font-medium transition hover:text-pink-500 ${
-                  isActive ? 'underline underline-offset-4 text-pink-600' : ''
+                `font-medium transition hover:text-pink-500 ${isActive ? 'underline underline-offset-4 text-pink-600' : ''
                 }`
               }
             >
@@ -134,8 +110,7 @@ const Header = () => {
               to={path}
               onClick={() => setMenuOpen(false)}
               className={({ isActive }) =>
-                `block text-sm font-medium text-gray-700 hover:text-pink-500 ${
-                  isActive ? 'underline underline-offset-4 text-pink-600' : ''
+                `block text-sm font-medium text-gray-700 hover:text-pink-500 ${isActive ? 'underline underline-offset-4 text-pink-600' : ''
                 }`
               }
             >
