@@ -1,29 +1,35 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { axiosInstance } from "../../services/fetchApi";
+
+
 export const getJobs = createAsyncThunk("/jobs/jobList", async (_, { rejectWithValue }) => {
     try {
         const res = await axiosInstance.get('/jobs')
         return res.data
     } catch (error) {
-        return rejectWithValue(error)
+        return rejectWithValue(error.response?.data?.message || 'Failed To Fetch Jobs')
     }
 })
+
+
 export const getJobById = createAsyncThunk("/jobs/getJobId", async (id, { rejectWithValue }) => {
     try {
-       
+
         const res = await axiosInstance.get(`/jobs/${id}`)
         return res.data
     } catch (error) {
-        return rejectWithValue(error)
+        return rejectWithValue(error.response?.data?.message || 'Failed To Fetch Job')
     }
 })
+
+
 export const jobSearch = createAsyncThunk(`/jobs/jobSearch`, async (q, { rejectWithValue }) => {
     try {
-        console.log("calling search")
-        const res = await axiosInstance.get(`/jobs/search/q=${q}`)
+        console.log("calling search : ", q)
+        const res = await axiosInstance.get(`/jobs/search?q=${q}`)
         return res.data
     } catch (error) {
-        return rejectWithValue(error)
+        return rejectWithValue(error.response?.data?.message || error.message || 'Search failed')
     }
 })
 
@@ -32,7 +38,7 @@ const jobSlice = createSlice({
     initialState: {
         jobList: [],
         selectedJob: null,
-        searchList:[],
+        searchList: [],
         loading: false,
         error: null
     },
@@ -44,6 +50,8 @@ const jobSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
+            //getting All Jobs
+
             .addCase(getJobs.pending, (state) => {
                 state.loading = true
             })
@@ -56,6 +64,8 @@ const jobSlice = createSlice({
                 state.error = action.payload
             })
 
+            //Getting Job By ID
+
             .addCase(getJobById.pending, (state) => {
                 state.loading = true
             })
@@ -67,12 +77,16 @@ const jobSlice = createSlice({
                 state.loading = false
                 state.error = action.payload
             })
+
+            //Search Jobs
+
             .addCase(jobSearch.fulfilled, (state, action) => {
                 state.loading = false
-                state.searchList = action.payload.searchResult
+                state.searchList = action.payload?.searchResult || []
             })
             .addCase(jobSearch.rejected, (state, action) => {
                 state.loading = false
+                state.searchList = []
                 state.error = action.payload
             })
     }

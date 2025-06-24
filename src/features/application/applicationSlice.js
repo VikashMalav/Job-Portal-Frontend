@@ -3,13 +3,20 @@ import { axiosInstance } from "../../services/fetchApi";
 
 export const applyToJob = createAsyncThunk("/applicant/applyToJob", async ({jobId,formData}, { rejectWithValue }) => {
     try {
-        console.log(jobId)
-        console.log(formData)
-        console.log("calling inside applyJob>>>>>>>")
+     
         const res = await axiosInstance.post(`/apply/${jobId}`,formData)
         return res.data
     } catch (error) {
         return rejectWithValue( error || 'Failed To Applied')
+    }
+})
+export const myAppliedJobs = createAsyncThunk("/applications/myAppliedJobs", async (userId, { rejectWithValue }) => {
+    try {
+     
+        const res = await axiosInstance.get(`/applications/user/${userId}`)
+        return res.data
+    } catch (error) {
+        return rejectWithValue( error.response.data.message || 'Failed To Applied')
     }
 })
 
@@ -17,6 +24,7 @@ const applicationSlice = createSlice({
     name: "applicant",
     initialState: {
         applicant:null,
+        myApplications:null,
         loading: false,
         error: null
     },
@@ -36,6 +44,18 @@ const applicationSlice = createSlice({
                 state.applicant = action.payload
             })
             .addCase(applyToJob.rejected, (state, action) => {
+                state.loading = false
+                state.error = action.payload
+            })
+
+            .addCase(myAppliedJobs.pending, (state) => {
+                state.loading = true
+            })
+            .addCase(myAppliedJobs.fulfilled, (state, action) => {
+                state.loading = false
+                state.myApplications = action.payload.data.appliedJobs
+            })
+            .addCase(myAppliedJobs.rejected, (state, action) => {
                 state.loading = false
                 state.error = action.payload
             })

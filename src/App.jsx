@@ -12,6 +12,7 @@ const PublicRoute = lazy(() => import('./pages/auth/PublicRoute'));
 const JobList = lazy(() => import('./pages/JobList'));
 const JobDetails = lazy(() => import('./pages/JobDetails'));
 const About = lazy(() => import('./pages/About'))
+const MyJob =lazy(()=>import('./pages/MyApplications'))
 // Custom loader
 import Loader from './components/skeleton/Loader';
 
@@ -31,7 +32,7 @@ const App = () => {
             <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
             <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>}>
               <Route index element={<JobList />} />
-              <Route path="/jobs" element={<JobList />} />
+              <Route path="/my-jobs" element={<MyJob />} />
               <Route path="/jobs/:id" element={<JobDetails />} />
               <Route path="/about" element={<About />} />
             </Route>
