@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import {  MapPin, Clock, DollarSign, Building2, Globe, Mail, Calendar, Share2, Bookmark, ArrowRight, CheckCircle } from 'lucide-react';
+import { MapPin, Clock, DollarSign, Building2, Globe, Mail, Calendar, Share2, Bookmark, ArrowRight, CheckCircle } from 'lucide-react';
 import { JobSkeleton } from '../components/skeleton/JobSkeleton';
 import { useDispatch, useSelector } from 'react-redux';
 import { clearSelectedJob, getJobById } from '../features/Job/jobSlice';
@@ -14,7 +14,10 @@ const JobDetails = () => {
     console.log(id)
     const dispatch = useDispatch();
 
-    const { selectedJob: job, error, loading } = useSelector((state) => state.jobs);
+    const { selectedJob: job, loading } = useSelector((state) => state.jobs);
+    const { user } = useSelector((state) => state.auth);
+    const { error } = useSelector((state) => state.applicant);
+
 
     useEffect(() => {
         dispatch(getJobById(id));
@@ -32,15 +35,25 @@ const JobDetails = () => {
 
     if (!job) return null;
 
+    const checkAlreadyApplied = user?.appliedJobs?.some((id) => id === job._id)
+
     const handleSubmit = async (formData) => {
         console.log(id)
         try {
-            dispatch(applyToJob({formData,jobId:id}))
-            toast.success("Application submitted successfully!");
-            setShowModal(false);
+            const application = await dispatch(applyToJob({ formData, jobId: id }))
+            console.log(application)
+            if (application?.success === true) {
+
+                return toast.success("Application submitted successfully!");
+            }
+            toast.info(application.message)
+
         } catch (error) {
             console.error(error);
-            toast.error(error.response?.data?.message || "Failed to apply");
+            toast.error(error || "Failed to apply");
+        }
+        finally {
+            setShowModal(false);
         }
     };
 
@@ -119,13 +132,22 @@ const JobDetails = () => {
                         </div>
 
                         <div className="lg:ml-8 mt-6 lg:mt-0">
-                            <button
-                                onClick={() => setShowModal(true)}
-                                className="w-full lg:w-auto bg-slate-900 hover:bg-slate-800 text-white px-8 py-4 rounded-lg font-semibold transition-all duration-200 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl"
-                            >
-                                Apply Now
-                                <ArrowRight className="w-4 h-4" />
-                            </button>
+                            {checkAlreadyApplied ?
+                                (<button
+                                    onClick={() => setShowModal(true)}
+                                    className="w-full lg:w-auto bg-slate-900 hover:bg-slate-800 text-white px-8 py-4 rounded-lg font-semibold transition-all duration-200 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl"
+                                >
+                                    Apply Now
+                                    <ArrowRight className="w-4 h-4" />
+                                </button>)
+                                : (<button
+                                    disabled={checkAlreadyApplied}
+                                    className="w-full lg:w-auto cursor-not-allowed bg-green-500 text-white px-8 py-4 rounded-lg font-semibold transition-all duration-200 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl"
+                                >
+                                   Already Applied
+                                    
+                                </button>)
+                            }
                             <p className="text-sm text-gray-500 mt-2 text-center lg:text-left">
                                 Join 50+ applicants
                             </p>
@@ -182,10 +204,10 @@ const JobDetails = () => {
                                             {job.company.website && (
                                                 <div className="flex items-center gap-3">
                                                     <Globe className="w-4 h-4 text-gray-400" />
-                                                    <a 
-                                                        href={job.company.website} 
-                                                        target="_blank" 
-                                                        rel="noopener noreferrer" 
+                                                    <a
+                                                        href={job.company.website}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
                                                         className="text-blue-600 hover:text-blue-800 transition-colors"
                                                     >
                                                         Visit Company Website
@@ -228,14 +250,23 @@ const JobDetails = () => {
                                     <span className="font-semibold text-gray-900">2-5 years</span>
                                 </div>
                             </div>
-                            
-                            <button
+
+                         {  checkAlreadyApplied ?
+                          <button
                                 onClick={() => setShowModal(true)}
                                 className="w-full mt-6 bg-slate-900 hover:bg-slate-800 text-white font-semibold py-3 rounded-lg transition-all duration-200 flex items-center justify-center gap-2"
                             >
                                 Quick Apply
                                 <ArrowRight className="w-4 h-4" />
                             </button>
+                            :(<button
+                                disabled={checkAlreadyApplied}
+                                className="w-full mt-6 bg-green-500 cursor-not-allowed text-white font-semibold py-3 rounded-lg transition-all duration-200 flex items-center justify-center gap-2"
+                            >
+                               Already Applied
+                               
+                            </button>)
+                            }
                         </div>
 
                         {/* Application Process */}

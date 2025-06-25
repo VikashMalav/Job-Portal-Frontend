@@ -83,7 +83,7 @@ const ApplicantFormModal = ({ isOpen, onClose, jobTitle, onSubmit }) => {
 
   return (
     <div
-      className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex justify-center items-start px-4 py-8 animate-in fade-in duration-200 overflow-y-auto"
+      className="fixed inset-0 bg-black/50 backdrop-blur-sm z-501 flex justify-center items-start px-4 py-8 animate-in fade-in duration-200 overflow-y-auto"
       onClick={handleOverlayClick}
     >
       <div
@@ -214,7 +214,7 @@ const ApplicantFormModal = ({ isOpen, onClose, jobTitle, onSubmit }) => {
               </div>
 
               {/* File Upload Section */}
-              <div className="space-y-2">
+              {/* <div className="space-y-2">
                 <label className="block text-sm font-semibold text-gray-700">
                   Resume / CV
                 </label>
@@ -230,7 +230,7 @@ const ApplicantFormModal = ({ isOpen, onClose, jobTitle, onSubmit }) => {
                     accept=".pdf,.doc,.docx"
                   />
                 </div>
-              </div>
+              </div> */}
             </div>
 
             {/* Application Tips */}

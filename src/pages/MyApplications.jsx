@@ -14,7 +14,7 @@ function MyApplications() {
   useEffect(() => {
     const getJobs = async () => {
       try {
-        dispatch(myAppliedJobs(user.id))
+        dispatch(myAppliedJobs(user._id))
       } catch (error) {
         console.log(error)
       }
@@ -26,7 +26,7 @@ function MyApplications() {
   return (
     <>
       {myApplications && myApplications.length > 0 && myApplications.map((job) => {
-        return <JobCard key={job._id} job={job} />
+        return <JobCard key={job._id} job={job} isApplied={true}/>
       })}
     </>
   )

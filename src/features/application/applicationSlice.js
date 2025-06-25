@@ -7,7 +7,7 @@ export const applyToJob = createAsyncThunk("/applicant/applyToJob", async ({jobI
         const res = await axiosInstance.post(`/apply/${jobId}`,formData)
         return res.data
     } catch (error) {
-        return rejectWithValue( error || 'Failed To Applied')
+        return rejectWithValue( error.response.data.message || 'Failed To Applied')
     }
 })
 export const myAppliedJobs = createAsyncThunk("/applications/myAppliedJobs", async (userId, { rejectWithValue }) => {
@@ -16,7 +16,7 @@ export const myAppliedJobs = createAsyncThunk("/applications/myAppliedJobs", asy
         const res = await axiosInstance.get(`/applications/user/${userId}`)
         return res.data
     } catch (error) {
-        return rejectWithValue( error.response.data.message || 'Failed To Applied')
+        return rejectWithValue( error.response.data.message || 'Failed To Fetch Applied Jobs')
     }
 })
 

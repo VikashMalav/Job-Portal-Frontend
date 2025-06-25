@@ -1,7 +1,7 @@
 import {  Building2, MapPin, Clock, BookmarkPlus, Users } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-const JobCard = ({ job, onSave, isSaved = false, onApply }) => {
+const JobCard = ({ job, onSave, isSaved = false, onApply,isApplied=false }) => {
 
   const formatSalary = (salary) => {
     if (!salary) return null;
@@ -162,9 +162,10 @@ const JobCard = ({ job, onSave, isSaved = false, onApply }) => {
             </Link>
             <button 
               onClick={() => onApply && onApply(job._id)}
-              className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors"
+              disabled={isApplied}
+              className={`px-4 py-2 text-sm font-medium text-white ${isApplied?"bg-green-500":"bg-blue-600"}  rounded-lg hover:bg-blue-700 transition-colors`}
             >
-              Apply Now
+              {isApplied?"Applied":"Apply Now"}
             </button>
           </div>
         </div>
