@@ -2,7 +2,7 @@ import { Briefcase, ChevronRight, Info, LogOut, Settings, User, X } from "lucide
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
-export default function Sidebar({ sidebarOpen, setSidebarOpen, handleLogout }) {
+ function Sidebar({ sidebarOpen, setSidebarOpen, handleLogout }) {
   const { user } = useSelector((state) => state.auth);
 
   const navItems = [
@@ -98,3 +98,5 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen, handleLogout }) {
     </div>
   );
 }
+
+export default Sidebar

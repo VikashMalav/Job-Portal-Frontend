@@ -1,10 +1,10 @@
 import { useState } from "react";
 import Header from "../components/Header";
-import Sidebar from "../components/SideBar";
 import { Outlet } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { logoutUser } from "../features/auth/authSlice";
 import { toast } from "react-toastify";
+import Sidebar from "../components/Sidebar";
 
 export default function Dashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
