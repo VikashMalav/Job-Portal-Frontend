@@ -4,7 +4,7 @@ import { axiosInstance } from "../../services/fetchApi";
 
 export const getJobs = createAsyncThunk("/jobs/jobList", async (_, { rejectWithValue }) => {
     try {
-        const res = await axiosInstance.get('/jobs')
+        const res = await axiosInstance.get('/jobs',{withCredentials:true})
         return res.data
     } catch (error) {
         return rejectWithValue(error.response?.data?.message || 'Failed To Fetch Jobs')
@@ -15,7 +15,7 @@ export const getJobs = createAsyncThunk("/jobs/jobList", async (_, { rejectWithV
 export const getJobById = createAsyncThunk("/jobs/getJobId", async (id, { rejectWithValue }) => {
     try {
 
-        const res = await axiosInstance.get(`/jobs/${id}`)
+        const res = await axiosInstance.get(`/jobs/${id}`,{withCredentials:true})
         return res.data
     } catch (error) {
         return rejectWithValue(error.response?.data?.message || 'Failed To Fetch Job')
@@ -26,7 +26,7 @@ export const getJobById = createAsyncThunk("/jobs/getJobId", async (id, { reject
 export const jobSearch = createAsyncThunk(`/jobs/jobSearch`, async (q, { rejectWithValue }) => {
     try {
         console.log("calling search : ", q)
-        const res = await axiosInstance.get(`/jobs/search?q=${q}`)
+        const res = await axiosInstance.get(`/jobs/search?q=${q}`,{withCredentials:true})
         return res.data
     } catch (error) {
         return rejectWithValue(error.response?.data?.message || error.message || 'Search failed')

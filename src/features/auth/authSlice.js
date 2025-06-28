@@ -20,7 +20,7 @@ export const verifyMe = createAsyncThunk('auth/me', async (_, { rejectWithValue 
 export const loginUser = createAsyncThunk('auth/login',
     async (formData, { rejectWithValue }) => {
         try {
-            const res = await API.post('/auth/login', formData);
+            const res = await API.post('/auth/login', formData,{withCredentials:true});
             return res.data;
         } catch (err) {
             return rejectWithValue(err.response?.data?.message || "Login failed");
@@ -32,7 +32,7 @@ export const loginUser = createAsyncThunk('auth/login',
 export const registerUser = createAsyncThunk('auth/register',
     async (formData, { rejectWithValue }) => {
         try {
-            const res = await API.post('/auth/register', formData);
+            const res = await API.post('/auth/register', formData,{withCredentials:true});
             return res.data;
         } catch (err) {
             return rejectWithValue(err.response?.data?.message || "Signup failed");
@@ -42,7 +42,7 @@ export const registerUser = createAsyncThunk('auth/register',
 export const logoutUser = createAsyncThunk('auth/logout',
     async (_, { rejectWithValue }) => {
         try {
-            const res = await API.post('/auth/logout');
+            const res = await API.post('/auth/logout',{withCredentials:true});
             return res.data;
         } catch (err) {
             return rejectWithValue(err.response?.data?.message || "Logout failed");
