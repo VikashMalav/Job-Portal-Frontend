@@ -132,18 +132,3 @@ Feel free to connect and share feedback!
 
 
 ---
-
-### ✅ What You Need To Do
-
-- Replace:
-  - `VikashMalav` with your GitHub username
-  - Screenshot image paths if needed
-  - Demo link & credentials if hosted
-- (Optional) Add badges, GitHub actions, or video previews
-
-Let me know if you'd like:
-- A **project banner/logo**
-- A **GitHub Actions CI setup**
-- Tailwind component docs or contributor guidelines
-
-Happy coding! 🚀
