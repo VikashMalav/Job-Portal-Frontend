@@ -10,7 +10,7 @@ function MyApplications() {
   const { user } = useSelector(state => state.auth)
   const [loading, setLoading] = useState(true)
 
-  console.log(myApplications)
+  console.log(user)
 
   useEffect(() => {
     const getJobs = async () => {
