@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { ChevronLeft, ChevronRight, MoreHorizontal } from 'lucide-react';
 
-const PaginationBar = ({ 
+ const PaginationBar = ({ 
   currentPage = 1, 
   totalPages = 10, 
   onPageChange = () => {},
@@ -100,7 +100,6 @@ const PaginationBar = ({
         </>
       )}
 
-      {/* Next Button */}
       <button
         onClick={() => handlePageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
@@ -116,62 +115,7 @@ const PaginationBar = ({
   );
 };
 
-// Demo component to show the pagination in action
-const PaginationDemo = () => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(20);
 
-  return (
-    <div className="p-8 max-w-4xl mx-auto">
-      <div className="bg-white rounded-xl shadow-lg p-6">
-        <h1 className="text-2xl font-bold text-gray-800 mb-6">Pagination Component Demo</h1>
-        
-        <div className="mb-6">
-          <p className="text-gray-600 mb-4">
-            Current Page: <span className="font-semibold text-blue-600">{currentPage}</span> of {totalPages}
-          </p>
-          
-          <div className="flex gap-4 mb-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Total Pages
-              </label>
-              <input
-                type="number"
-                min="1"
-                max="100"
-                value={totalPages}
-                onChange={(e) => setTotalPages(Math.max(1, parseInt(e.target.value) || 1))}
-                className="w-20 px-3 py-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Go to Page
-              </label>
-              <input
-                type="number"
-                min="1"
-                max={totalPages}
-                value={currentPage}
-                onChange={(e) => setCurrentPage(Math.min(totalPages, Math.max(1, parseInt(e.target.value) || 1)))}
-                className="w-20 px-3 py-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
-          </div>
-        </div>
 
-        <div className="flex justify-center py-8 border-t border-gray-200">
-          <PaginationBar
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={setCurrentPage}
-          />
-        </div>
 
-      </div>
-    </div>
-  );
-};
-
-export default PaginationDemo;
+export default PaginationBar;

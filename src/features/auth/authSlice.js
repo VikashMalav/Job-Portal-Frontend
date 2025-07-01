@@ -1,16 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
-export const API = axios.create({
-    baseURL: import.meta.env.VITE_BASE_URL,
-    withCredentials: true,
-    headers: {
-        "Content-Type": "application/json",
-    },
-});
+import { axiosInstance } from '../../services/fetchApi';
 
-export const verifyMe = createAsyncThunk('auth/me', async (_, { rejectWithValue }) => {
+
+export const verifyMe = createAsyncThunk('auth/verifyMe', async (_, { rejectWithValue }) => {
     try {
-        const res = await API.get('/auth/profile');
+        const res = await axiosInstance.get('/auth/profile');
         return res.data.user;
     } catch (err) {
         return rejectWithValue(err);
@@ -20,7 +14,7 @@ export const verifyMe = createAsyncThunk('auth/me', async (_, { rejectWithValue 
 export const loginUser = createAsyncThunk('auth/login',
     async (formData, { rejectWithValue }) => {
         try {
-            const res = await API.post('/auth/login', formData,{withCredentials:true});
+            const res = await axiosInstance.post('/auth/login', formData);
             return res.data;
         } catch (err) {
             return rejectWithValue(err.response?.data?.message || "Login failed");
@@ -32,7 +26,7 @@ export const loginUser = createAsyncThunk('auth/login',
 export const registerUser = createAsyncThunk('auth/register',
     async (formData, { rejectWithValue }) => {
         try {
-            const res = await API.post('/auth/register', formData,{withCredentials:true});
+            const res = await axiosInstance.post('/auth/register', formData);
             return res.data;
         } catch (err) {
             return rejectWithValue(err.response?.data?.message || "Signup failed");
@@ -42,7 +36,7 @@ export const registerUser = createAsyncThunk('auth/register',
 export const logoutUser = createAsyncThunk('auth/logout',
     async (_, { rejectWithValue }) => {
         try {
-            const res = await API.post('/auth/logout',{withCredentials:true});
+            const res = await axiosInstance.post('/auth/logout');
             return res.data;
         } catch (err) {
             return rejectWithValue(err.response?.data?.message || "Logout failed");
