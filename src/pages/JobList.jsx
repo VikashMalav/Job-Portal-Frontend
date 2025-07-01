@@ -5,13 +5,14 @@ import { changePage, getJobs } from "../features/Job/jobSlice";
 import JobCard from "../components/JobCard";
 import PaginationBar from "../components/Pagination";
 import React from "react";
+import AwesomeLoader from "../components/skeleton/Loader";
 
 const JobList = () => {
   const [savedJobs, setSavedJobs] = useState(new Set());
   const [limit, setLimit] = useState(2);
 
   const dispatch = useDispatch();
-  const { jobList,totalJobs, totalPages, page } = useSelector((state) => state.jobs);
+  const { jobList, totalJobs, totalPages, page, loading } = useSelector((state) => state.jobs);
 
   useEffect(() => {
     dispatch(getJobs({ page, limit }));
@@ -48,29 +49,36 @@ const JobList = () => {
           <h3 className="text-lg font-medium text-gray-900 mb-2">No jobs found</h3>
           <p className="text-gray-600">Check back later for new opportunities</p>
         </div>
-      ) : (
-        <>
-          <div className="space-y-6">
-            {jobList.map((job) => (
-              <JobCard
-                key={job._id}
-                job={job}
-                onSave={handleSaveJob}
-                isSaved={savedJobs.has(job._id)}
-                onApply={handleApplyJob}
-              />
-            ))}
-          </div>
+      )
+        : loading ?
+          (<div className="flex items-center justify-center py-20">
+            <div className="animate-spin rounded-full h-10 w-10 border-t-4 border-blue-500 border-solid"></div>
+            <span className="ml-4 text-blue-500 font-semibold text-lg">Loading jobs...</span>
+          </div>)
+          : (
+            <>
+              <div className="space-y-6">
+                {jobList.map((job) => (
+                  <JobCard
+                    key={job._id}
+                    job={job}
+                    onSave={handleSaveJob}
+                    isSaved={savedJobs.has(job._id)}
+                    onApply={handleApplyJob}
+                  />
+                ))}
+              </div>
 
-          <div className="flex justify-center py-8 border-t border-gray-200">
-            <PaginationBar
-              currentPage={page}
-              totalPages={totalPages}
-              onPageChange={handleChange}
-            />
-          </div>
-        </>
-      )}
+              <div className="flex justify-center py-8 border-t border-gray-200">
+                <PaginationBar
+                  currentPage={page}
+                  totalPages={totalPages}
+                  onPageChange={handleChange}
+                />
+              </div>
+            </>
+          )
+      }
     </div>
   );
 };
