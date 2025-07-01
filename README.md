@@ -57,24 +57,23 @@ JobSphere is a full-stack job portal application that connects job seekers with 
 
 ## 📁 Project Structure
 
+```bash
 jobsphere/
-├── client/ # Frontend - React
-│ ├── src/
-│ │ ├── components/
-│ │ ├── features/
-│ │ ├── pages/
-│ │ └── ...
-│ └── public/
+├── client/         # Frontend - React
+│   ├── src/
+│   │   ├── components/
+│   │   ├── features/
+│   │   ├── pages/
+│   │   └── ...
+│   └── public/
 │
-├── server/ # Backend - Express
-│ ├── controllers/
-│ ├── models/
-│ ├── routes/
-│ ├── middleware/
-│ └── ...
+├── server/         # Backend - Express
+│   ├── controllers/
+│   ├── models/
+│   ├── routes/
+│   ├── middleware/
+│   └── ...
 
-
----
 
 ## 🧩 Getting Started
 
