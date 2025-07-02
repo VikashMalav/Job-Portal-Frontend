@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import { logoutUser } from "../features/auth/authSlice";
 import { toast } from "react-toastify";
 import Sidebar from "../components/Sidebar";
+import Footer from "../components/Footer";
 
 export default function Dashboard() {
   
@@ -39,6 +40,7 @@ export default function Dashboard() {
           <Outlet />
         </main>
       </div>
+      <Footer/>
     </div>
   );
 }

@@ -9,7 +9,7 @@ import AwesomeLoader from "../components/skeleton/Loader";
 
 const JobList = () => {
   const [savedJobs, setSavedJobs] = useState(new Set());
-  const [limit, setLimit] = useState(2);
+  const [limit, setLimit] = useState(5);
 
   const dispatch = useDispatch();
   const { jobList, totalJobs, totalPages, page, loading } = useSelector((state) => state.jobs);
