@@ -18,7 +18,7 @@ const Settings = lazy(() => import('./components/Settings'));
 const ChangePassword = lazy(() => import('./components/changePasswordForm'));
 const Loader = lazy(() => import('./components/skeleton/Loader'));
 const AdminLayout = lazy(() => import('./pages/admin/AdminLayout'));
-const EmployerLayout = lazy(() => import('./pages/employer/employerLayout'));
+const EmployerLayout = lazy(() => import('./pages/employer/EmployerLayout'));
 const SavedJobs = lazy(() => import('./pages/user/SavedJobs'));
 
 const App = () => {
