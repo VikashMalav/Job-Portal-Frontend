@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import EmployerSidebar from "../components/EmployerSidebar";
+import EmployerSidebar from "../../components/EmployerSidebar";
 
 const EmployerLayout = () => {
   return (
