@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { MapPin, Clock, DollarSign, Building2, Globe, Mail, Calendar, Share2, Bookmark, ArrowRight, CheckCircle } from 'lucide-react';
-import { JobSkeleton } from '../components/skeleton/JobSkeleton';
+import { JobSkeleton } from '../../components/skeleton/JobSkeleton';
 import { useDispatch, useSelector } from 'react-redux';
-import { clearSelectedJob, getJobById } from '../features/Job/jobSlice';
-import ApplicantFormModal from '../components/ApplicantFormModal';
-import { applyToJob } from '../features/application/applicationSlice';
+import { clearSelectedJob, getJobById } from '../../features/Job/jobSlice';
+import ApplicantFormModal from '../../components/ApplicantFormModal';
+import { applyToJob } from '../../features/application/applicationSlice';
 import { toast } from 'react-toastify';
+import { formatDate } from '../../services/formetDate';
 
 const JobDetails = () => {
     const [showModal, setShowModal] = useState(false)
@@ -50,7 +51,7 @@ const JobDetails = () => {
         }
     } catch (error) {
         console.error("Error:", error);
-        toast.error(error?.message || "Failed to apply.");
+        toast.error(error|| "Failed to apply.");
     } finally {
         setShowModal(false);
     }
@@ -110,7 +111,7 @@ const JobDetails = () => {
                                 </div>
                                 <div className="flex items-center gap-2">
                                     <Calendar className="w-4 h-4" />
-                                    <span>Posted 2 days ago</span>
+                                    <span>{formatDate(job.createdAt)}</span>
                                 </div>
                             </div>
 

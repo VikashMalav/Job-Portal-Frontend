@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import JobCard from '../components/JobCard'
-import { myAppliedJobs } from '../features/application/applicationSlice'
+import JobCard from '../../components/JobCard'
+import { myAppliedJobs } from '../../features/application/applicationSlice'
 import { Link } from 'react-router-dom'
 
 function MyApplications() {
@@ -88,7 +88,7 @@ function MyApplications() {
       <div className="max-w-6xl mx-auto px-4">
      
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-800 mb-2">My Applications</h1>
+          <h1 className="text-3xl font-bold text-gray-800 mb-2">Applied Jobs</h1>
           <p className="text-gray-600">
             You have applied to {myApplications.length} job{myApplications.length !== 1 ? 's' : ''}
           </p>

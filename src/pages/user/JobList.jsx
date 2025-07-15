@@ -1,30 +1,43 @@
 import { Briefcase } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { changePage, getJobs } from "../features/Job/jobSlice";
-import JobCard from "../components/JobCard";
-import PaginationBar from "../components/Pagination";
-import React from "react";
-import AwesomeLoader from "../components/skeleton/Loader";
+import { changePage, getJobs, getSavedJobs, saveJob } from "../../features/Job/jobSlice";
+import JobCard from "../../components/JobCard";
+import PaginationBar from "../../components/Pagination";
+
+import { toast } from "react-toastify";
 
 const JobList = () => {
-  const [savedJobs, setSavedJobs] = useState(new Set());
   const [limit, setLimit] = useState(5);
 
   const dispatch = useDispatch();
-  const { jobList, totalJobs, totalPages, page, loading } = useSelector((state) => state.jobs);
+  const { jobList, totalJobs, totalPages, page, loading, savedJobs, toastMessage } = useSelector((state) => state.jobs);
+  const { user } = useSelector((state) => state.auth);
+
 
   useEffect(() => {
     dispatch(getJobs({ page, limit }));
   }, [dispatch, page, limit]);
 
-  const handleSaveJob = (jobId) => {
-    setSavedJobs((prev) => {
-      const newSaved = new Set(prev);
-      newSaved.has(jobId) ? newSaved.delete(jobId) : newSaved.add(jobId);
-      return newSaved;
-    });
+  useEffect(() => {
+    if (user?._id) {
+      dispatch(getSavedJobs(user._id));
+    }
+  }, [dispatch, user?._id]);
+
+  const handleSaveJob = async (jobId) => {
+    try {
+      await dispatch(saveJob({ jobId, userId: user._id }));
+      await dispatch(getSavedJobs(user._id));
+      toast.success(toastMessage)
+    }
+    catch (error) {
+      toast.error("Failed to save job");
+      console.error("Save job error:", error);
+    }
   };
+
+
 
   const handleApplyJob = (jobId) => {
     console.log("Applying to job:", jobId);
@@ -59,11 +72,12 @@ const JobList = () => {
             <>
               <div className="space-y-6">
                 {jobList.map((job) => (
+
                   <JobCard
                     key={job._id}
                     job={job}
-                    onSave={handleSaveJob}
-                    isSaved={savedJobs.has(job._id)}
+                    onSave={() => handleSaveJob(job._id)}
+                    isSaved={savedJobs?.map(job => job._id).includes(job._id)}
                     onApply={handleApplyJob}
                   />
                 ))}

@@ -1,6 +1,6 @@
 import {  Building2, MapPin, Clock, BookmarkPlus, Users } from 'lucide-react';
 import { Link } from 'react-router-dom';
-
+import { formatDate } from '../services/formetDate';
 const JobCard = ({ job, onSave, isSaved = false, onApply,isApplied=false }) => {
 
   const formatSalary = (salary) => {
@@ -14,19 +14,6 @@ const JobCard = ({ job, onSave, isSaved = false, onApply,isApplied=false }) => {
   };
 
   
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    const now = new Date();
-    const diffTime = Math.abs(now - date);
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    
-    if (diffDays === 1) return '1 day ago';
-    if (diffDays < 7) return `${diffDays} days ago`;
-    if (diffDays < 30) return `${Math.floor(diffDays / 7)} weeks ago`;
-    return date.toLocaleDateString();
-  };
-
- 
   const getJobTypeColor = (jobType) => {
     const colors = {
       'Full-time': 'bg-green-100 text-green-800',

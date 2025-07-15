@@ -1,11 +1,11 @@
 import { useState } from "react";
-import Header from "../components/Header";
+import Header from "../../components/Header";
 import { Outlet, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { logoutUser } from "../features/auth/authSlice";
+import { logoutUser } from "../../features/auth/authSlice";
 import { toast } from "react-toastify";
-import Sidebar from "../components/Sidebar";
-import Footer from "../components/Footer";
+import Sidebar from "../../components/Sidebar";
+import Footer from "../../components/Footer";
 
 export default function Dashboard() {
   

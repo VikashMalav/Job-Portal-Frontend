@@ -1,14 +1,23 @@
-import { Briefcase, ChevronRight, Info, LogOut, Settings, User, X } from "lucide-react";
+import { Briefcase, ChevronRight, Info, LogOut, Settings, User, X, HelpCircle, Bookmark, Send } from "lucide-react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
- function Sidebar({ sidebarOpen, setSidebarOpen, handleLogout }) {
+function Sidebar({ sidebarOpen, setSidebarOpen, handleLogout }) {
   const { user } = useSelector((state) => state.auth);
 
+  // Base nav items
   const navItems = [
-    { label: "My Jobs", path: "/my-jobs", icon: Briefcase },
-    { label: "About", path: "/about", icon: Info },
+    { label: "Saved Jobs", path: "/saved-jobs", icon: Bookmark },
+    { label: "Applied Jobs", path: "/applied-jobs", icon: Send },
+    { label: "About", path: "/about", icon: Info }
   ];
+
+  // Role-based dashboard nav
+  if (user?.role === "employer") {
+    navItems.unshift({ label: "Employer Dashboard", path: "/employer-dashboard", icon: Briefcase });
+  } else if (user?.role === "admin") {
+    navItems.unshift({ label: "Admin Panel", path: "/admin-panel", icon: Briefcase });
+  }
 
   return (
     <div
@@ -28,7 +37,6 @@ import { Link } from "react-router-dom";
             </div>
             <span className="text-xl font-bold text-gray-900">JobSphere</span>
           </div>
-          {/* Close button only for mobile */}
           <button
             onClick={() => setSidebarOpen(false)}
             className="p-2 rounded-lg hover:bg-gray-100 transition-colors lg:hidden"
@@ -52,7 +60,7 @@ import { Link } from "react-router-dom";
           </div>
         )}
 
-        {/* Nav */}
+        {/* Nav Items */}
         <nav className="flex-1 p-6 overflow-y-auto">
           <div className="space-y-2">
             {navItems.map(({ label, path, icon: Icon }) => (
@@ -71,18 +79,19 @@ import { Link } from "react-router-dom";
             ))}
           </div>
 
-          <div className="mt-8 pt-6 border-t border-gray-200">
-            <button className="w-full flex items-center justify-between p-4 rounded-xl text-gray-700 hover:bg-gray-50 transition-colors">
+          {/* Settings */}
+          <div className="mt-8 pt-6 border-t border-gray-200" onClick={() => setSidebarOpen(false)}>
+            <Link to="/settings" className="w-full flex items-center justify-between p-4 rounded-xl text-gray-700 hover:bg-gray-50 transition-colors">
               <div className="flex items-center gap-3">
                 <Settings className="w-5 h-5" />
                 <span className="font-medium">Settings</span>
               </div>
               <ChevronRight className="w-4 h-4 text-gray-400" />
-            </button>
+            </Link>
           </div>
         </nav>
 
-        {/* Footer */}
+        {/* Logout */}
         <div className="p-6 border-t border-gray-200">
           {user && (
             <button
@@ -99,4 +108,4 @@ import { Link } from "react-router-dom";
   );
 }
 
-export default Sidebar
+export default Sidebar;
