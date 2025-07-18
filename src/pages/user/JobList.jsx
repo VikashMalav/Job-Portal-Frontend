@@ -1,4 +1,5 @@
 import { Briefcase } from "lucide-react";
+import ProLoader from "../../components/skeleton/ProLoader";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { changePage, getJobs, getSavedJobs, saveJob } from "../../features/Job/jobSlice";
@@ -64,10 +65,7 @@ const JobList = () => {
         </div>
       )
         : loading ?
-          (<div className="flex items-center justify-center py-20">
-            <div className="animate-spin rounded-full h-10 w-10 border-t-4 border-blue-500 border-solid"></div>
-            <span className="ml-4 text-blue-500 font-semibold text-lg">Loading jobs...</span>
-          </div>)
+          (<ProLoader text="Loading jobs..." />)
           : (
             <>
               <div className="space-y-6">

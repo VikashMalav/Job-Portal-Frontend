@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import ProLoader from '../../components/skeleton/ProLoader';
 import { useDispatch, useSelector } from 'react-redux'
 import JobCard from '../../components/JobCard'
 import { myAppliedJobs } from '../../features/application/applicationSlice'
@@ -31,14 +32,7 @@ function MyApplications() {
 
  
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading your applications...</p>
-        </div>
-      </div>
-    )
+    return <ProLoader text="Loading your applications..." />;
   }
 
  

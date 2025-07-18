@@ -1,32 +1,31 @@
 import React from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import ProLoader from '../../components/skeleton/ProLoader';
 
 function ProtectedRoute({ children, allowedRoles }) {
   console.log("ProtectedRoute rendered");
-  const { user,loading } = useSelector(state => state.auth);
-console.log(user,loading);
+  const { user, loading } = useSelector(state => state.auth);
+  console.log(user?.role, loading);
+  console.log("Allowed roles:", allowedRoles, "User role:", user?.role);
+  console.log("Role match:", allowedRoles?.includes(user?.role));
 
   if (loading) {
-    return (
-      <div className="w-screen h-screen flex items-center justify-center bg-white">
-        <div className="w-12 h-12 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
-      </div>
-    );
+    return <ProLoader text="Checking authentication..." />;
   }
-
 
   if (!user) {
     return <Navigate to="/login" replace />;
   }
 
-
-  if (allowedRoles && !allowedRoles.includes(user.role)) {
+  if (allowedRoles && !allowedRoles.includes(user?.role)) {
+    // Role mismatch: redirect to correct dashboard
+    if (user?.role === 'admin') return <Navigate to="/admin" replace />;
+    if (user?.role === 'employer') return <Navigate to="/employer" replace />;
     return <Navigate to="/" replace />;
   }
 
- 
-  return children;
+  return <Outlet />;
 }
 
 export default ProtectedRoute;

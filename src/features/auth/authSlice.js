@@ -3,6 +3,7 @@ import { axiosInstance } from '../../services/fetchApi';
 
 
 export const verifyMe = createAsyncThunk('auth/verifyMe', async (_, { rejectWithValue }) => {
+    console.log("verifyMe thunk called");
     try {
         const res = await axiosInstance.get('/auth/profile');
         return res.data.user;

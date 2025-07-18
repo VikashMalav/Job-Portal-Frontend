@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getSavedJobs, saveJob } from "../../features/Job/jobSlice";
 import JobCard from "../../components/JobCard";
 import { toast } from "react-toastify";
-import AwesomeLoader from "../../components/skeleton/Loader";
+import ProLoader from "../../components/skeleton/ProLoader";
 
 const SavedJobs = () => {
   const dispatch = useDispatch();
@@ -29,7 +29,7 @@ useEffect(() => {
   };
 
   if (loading) {
-    return <AwesomeLoader />;
+    return <ProLoader text="Loading saved jobs..." />;
   }
 
   return (

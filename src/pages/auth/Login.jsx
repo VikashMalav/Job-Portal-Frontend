@@ -74,8 +74,15 @@ const UserAuth = () => {
         autoClose: 3000,
         closeButton: true,
       });
-      console.log(action)
-      navigate('/')
+      console.log(action);
+      // Role-based redirect
+      if (action.user?.role === 'admin') {
+        navigate('/admin', { replace: true });
+      } else if (action.user?.role === 'employer') {
+        navigate('/employer', { replace: true });
+      } else {
+        navigate('/', { replace: true });
+      }
     } catch (err) {
       console.log(err)
       toast.update(loadingToast, {
