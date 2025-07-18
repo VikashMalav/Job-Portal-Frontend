@@ -22,6 +22,10 @@ const AdminDashboard = lazy(() => import('./pages/admin/Dashboard'));
 const AdminUsers = lazy(() => import('./pages/admin/Users'));
 const AdminSettings = lazy(() => import('./pages/admin/Settings'));
 const EmployerLayout = lazy(() => import('./pages/employer/EmployerLayout'));
+const EmployerDashboard = lazy(() => import('./pages/employer/Dashboard'));
+const EmployerJobs = lazy(() => import('./pages/employer/Jobs'));
+const EmployerPostJob = lazy(() => import('./pages/employer/PostJob'));
+const EmployerApplicants = lazy(() => import('./pages/employer/Applicants'));
 const SavedJobs = lazy(() => import('./pages/user/SavedJobs'));
 const Unauthorized = lazy(() => import('./pages/Unauthorized'));
 const App = () => {
@@ -68,13 +72,18 @@ const App = () => {
             </Route>
 
             <Route
-              path="/employer"
-              element={
-                <ProtectedRoute allowedRoles={['employer']}>
-                  <EmployerLayout />
-                </ProtectedRoute>
-              }
-            />
+              path="/employer/*"
+              element={<ProtectedRoute allowedRoles={['employer']} />}
+            >
+              <Route element={<EmployerLayout />}>
+                <Route index element={<EmployerDashboard />} />
+                <Route path="dashboard" element={<EmployerDashboard />} />
+                <Route path="jobs" element={<EmployerJobs />} />
+                <Route path="post-job" element={<EmployerPostJob />} />
+                <Route path="applicants" element={<EmployerApplicants />} />
+                <Route path="*" element={<Navigate to="dashboard" />} />
+              </Route>
+            </Route>
            <Route path="/unauthorized" element={<Unauthorized />} />
 
             <Route path="*" element={<Navigate to="/" />} />
