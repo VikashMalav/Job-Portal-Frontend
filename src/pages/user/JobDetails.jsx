@@ -1,13 +1,61 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { MapPin, Clock, DollarSign, Building2, Globe, Mail, Calendar, Share2, Bookmark, ArrowRight, CheckCircle } from 'lucide-react';
 import { JobSkeleton } from '../../components/skeleton/JobSkeleton';
 import { useDispatch, useSelector } from 'react-redux';
-import { clearSelectedJob, getJobById } from '../../features/Job/jobSlice';
+import { clearSelectedJob, getJobById, saveJob, getSavedJobs } from '../../features/Job/jobSlice';
 import ApplicantFormModal from '../../components/ApplicantFormModal';
 import { applyToJob } from '../../features/application/applicationSlice';
 import { toast } from 'react-toastify';
 import { formatDate } from '../../services/formetDate';
+
+
+import { ChevronDown } from 'lucide-react';
+
+function AccordionJobDescription({ description }) {
+  const [open, setOpen] = useState(false);
+  const contentRef = React.useRef(null);
+
+  // Keyboard accessibility
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      setOpen((prev) => !prev);
+    }
+  };
+
+  return (
+    <div className="mb-6">
+      <button
+        className={`w-full flex justify-between items-center text-left text-2xl font-bold text-gray-900 border-b border-gray-100 pb-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 transition-colors ${open ? 'mb-2' : 'mb-6'}`}
+        onClick={() => setOpen((prev) => !prev)}
+        aria-expanded={open}
+        aria-controls="job-desc-panel"
+        tabIndex={0}
+        onKeyDown={handleKeyDown}
+        type="button"
+      >
+        <span>Job Description</span>
+        <ChevronDown className={`w-6 h-6 ml-2 transition-transform duration-300 ${open ? 'rotate-180' : ''}`} />
+      </button>
+      <div
+        id="job-desc-panel"
+        ref={contentRef}
+        style={{
+          maxHeight: open ? contentRef.current?.scrollHeight : 0,
+          overflow: 'hidden',
+          transition: 'max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1)',
+        }}
+        aria-hidden={!open}
+        className="prose prose-gray max-w-none"
+      >
+        <div className="py-2">
+          <p className="text-gray-700 leading-relaxed text-base">{description}</p>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 const JobDetails = () => {
     const [showModal, setShowModal] = useState(false)
@@ -15,7 +63,21 @@ const JobDetails = () => {
     console.log(id)
     const dispatch = useDispatch();
 
-    const { selectedJob: job, loading } = useSelector((state) => state.jobs);
+    const { selectedJob: job, loading, savedJobs = [], toastMessage } = useSelector((state) => state.jobs);
+    // Check if job is saved
+    const isSaved = savedJobs?.some((saved) => saved._id === job?._id);
+
+    // Save/Unsave job handler
+    const handleSaveJob = async () => {
+        if (!user?._id || !job?._id) return;
+        try {
+            await dispatch(saveJob({ jobId: job._id, userId: user._id }));
+            await dispatch(getSavedJobs(user._id));
+            toast.success(isSaved ? "Job removed from saved jobs" : "Job saved!");
+        } catch (error) {
+            toast.error("Failed to save job");
+        }
+    };
     const { user } = useSelector((state) => state.auth);
     const { error } = useSelector((state) => state.applicant);
 
@@ -73,7 +135,11 @@ const JobDetails = () => {
                             <button className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-all">
                                 <Share2 className="w-5 h-5" />
                             </button>
-                            <button className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-all">
+                            <button
+                                className={`p-2 rounded-lg transition-colors ${isSaved ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-400 hover:bg-gray-200'}`}
+                                onClick={handleSaveJob}
+                                title={isSaved ? 'Remove from saved' : 'Save job'}
+                            >
                                 <Bookmark className="w-5 h-5" />
                             </button>
                         </div>
@@ -164,17 +230,11 @@ const JobDetails = () => {
                 <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
                     {/* Main Content */}
                     <div className="lg:col-span-3">
-                        {/* Job Description */}
+                        {/* Job Description Accordion */}
                         <section className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 mb-8">
-                            <h2 className="text-2xl font-bold text-gray-900 mb-6 border-b border-gray-100 pb-4">
-                                Job Description
-                            </h2>
-                            <div className="prose prose-gray max-w-none">
-                                <p className="text-gray-700 leading-relaxed text-base">
-                                    {job.description}
-                                </p>
-                            </div>
+                            <AccordionJobDescription description={job.description} />
                         </section>
+
 
                         {/* Requirements */}
                         <section className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 mb-8">
@@ -310,5 +370,8 @@ const JobDetails = () => {
         </div>
     );
 };
+
+
+
 
 export default JobDetails;

@@ -37,7 +37,7 @@ const Settings = () => {
               className="flex items-center gap-3 text-gray-700 dark:text-gray-200 hover:text-indigo-600 dark:hover:text-indigo-400 transition"
             >
               <User className="w-5 h-5" />
-              Profile Settings
+              Profile Settings (coming soon)
             </Link>
           </li>
           <li>

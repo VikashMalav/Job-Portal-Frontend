@@ -1,3 +1,12 @@
+// Fetch user profile details for profile page
+export const fetchProfile = createAsyncThunk('auth/fetchProfile', async (_, { rejectWithValue }) => {
+  try {
+    const res = await axiosInstance.get('/auth/profile');
+    return res.data.user;
+  } catch (err) {
+    return rejectWithValue(err.response?.data?.message || 'Failed to fetch profile');
+  }
+});
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { axiosInstance } from '../../services/fetchApi';
 
@@ -72,6 +81,20 @@ const authSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
+
+            // Profile fetch for profile page
+            .addCase(fetchProfile.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(fetchProfile.fulfilled, (state, action) => {
+                state.loading = false;
+                state.user = action.payload;
+            })
+            .addCase(fetchProfile.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
 
             .addCase(loginUser.pending, (state) => {
                 state.loading = true;

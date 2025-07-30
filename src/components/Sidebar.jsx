@@ -29,29 +29,38 @@ function Sidebar({ sidebarOpen, setSidebarOpen, handleLogout }) {
   }
 
   return (
-    <div
-      className={`
-        fixed lg:sticky lg:relative top-0 left-0 h-full w-64 lg:w-60 bg-gradient-to-b from-white via-gray-50 to-gray-100 shadow-2xl lg:shadow-none
-        border-r border-gray-200
-        transform transition-transform duration-300 ease-in-out z-50
-        ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
-        lg:translate-x-0 lg:flex lg:flex-col
-      `}
-    >
-      <div className="flex flex-col h-full overflow-y-auto scrollbar-thin scrollbar-thumb-gray-400">
+    <>
+      {/* Overlay for mobile: closes sidebar on click */}
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black/40 z-40 lg:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+      <div
+        className={`
+          fixed top-16 left-0 h-[calc(100vh-4rem)] w-4/5 max-w-xs bg-gradient-to-b from-white via-gray-50 to-gray-100 shadow-2xl border-r border-gray-200
+          transform transition-transform duration-300 ease-in-out z-50
+          ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
+          lg:sticky lg:relative lg:top-0 lg:h-screen lg:w-60 lg:translate-x-0 lg:flex lg:flex-col lg:shadow-none
+        `}
+        style={{ touchAction: 'manipulation', overflowY: 'auto' }}
+      >
+        <div className="flex flex-col h-full scrollbar-thin scrollbar-thumb-gray-400">
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-gray-200 lg:hidden">
           <div className="flex items-center gap-3 ">
-            <div className="p-2 bg-indigo-100 rounded-lg">
-              <Briefcase className="w-6 h-6 text-indigo-600" />
+            <div className="p-3 bg-indigo-100 rounded-lg">
+              <Briefcase className="w-7 h-7 text-indigo-600" />
             </div>
             <span className="text-xl font-bold text-gray-900">JobSphere</span>
           </div>
           <button
             onClick={() => setSidebarOpen(false)}
-            className="p-2 rounded-lg hover:bg-gray-100 transition-colors lg:hidden"
+            className="p-3 rounded-lg hover:bg-gray-100 transition-colors lg:hidden"
+            aria-label="Close sidebar"
           >
-            <X className="w-6 h-6 text-gray-500" />
+            <X className="w-7 h-7 text-gray-500" />
           </button>
         </div>
 
@@ -72,7 +81,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen, handleLogout }) {
 
         {/* Nav Items */}
         <nav className="flex-1 p-4 overflow-y-auto">
-          <div className="space-y-1">
+          <div className="space-y-2">
             {navItems.map(({ label, path, icon: Icon }) => {
               const isActive = location.pathname === path;
               return (
@@ -80,14 +89,15 @@ function Sidebar({ sidebarOpen, setSidebarOpen, handleLogout }) {
                   key={path}
                   to={path}
                   onClick={() => setSidebarOpen(false)}
-                  className={`flex items-center justify-between p-3 rounded-lg text-gray-700 transition-colors font-medium
+                  className={`flex items-center justify-between p-4 rounded-xl text-gray-700 transition-colors font-medium text-base
                     ${isActive ? 'bg-indigo-100 text-indigo-700 font-semibold shadow' : 'hover:bg-gray-50'}`}
+                  style={{ minHeight: 48 }}
                 >
-                  <div className="flex items-center gap-3">
-                    <Icon className="w-5 h-5" />
+                  <div className="flex items-center gap-4">
+                    <Icon className="w-6 h-6" />
                     <span>{label}</span>
                   </div>
-                  <ChevronRight className="w-4 h-4 text-gray-400" />
+                  <ChevronRight className="w-5 h-5 text-gray-400" />
                 </Link>
               );
             })}
@@ -95,14 +105,15 @@ function Sidebar({ sidebarOpen, setSidebarOpen, handleLogout }) {
 
           {/* Settings */}
           <div className="mt-8 pt-6 border-t border-gray-200" onClick={() => setSidebarOpen(false)}>
-            <Link to="/settings" className={`w-full flex items-center justify-between p-3 rounded-lg text-gray-700 transition-colors font-medium
+            <Link to="/settings" className={`w-full flex items-center justify-between p-4 rounded-xl text-gray-700 transition-colors font-medium text-base
               ${location.pathname === '/settings' ? 'bg-indigo-100 text-indigo-700 font-semibold shadow' : 'hover:bg-gray-50'}`}
+              style={{ minHeight: 48 }}
             >
-              <div className="flex items-center gap-3">
-                <Settings className="w-5 h-5" />
+              <div className="flex items-center gap-4">
+                <Settings className="w-6 h-6" />
                 <span>Settings</span>
               </div>
-              <ChevronRight className="w-4 h-4 text-gray-400" />
+              <ChevronRight className="w-5 h-5 text-gray-400" />
             </Link>
           </div>
         </nav>
@@ -112,15 +123,17 @@ function Sidebar({ sidebarOpen, setSidebarOpen, handleLogout }) {
           {user && (
             <button
               onClick={handleLogout}
-              className="w-full flex items-center gap-3 p-3 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors font-medium"
+              className="w-full flex items-center gap-4 p-4 bg-red-50 text-red-600 rounded-xl hover:bg-red-100 transition-colors font-medium text-base"
+              style={{ minHeight: 48 }}
             >
-              <LogOut className="w-5 h-5" />
+              <LogOut className="w-6 h-6" />
               Logout
             </button>
           )}
         </div>
       </div>
-    </div>
+      </div>
+    </>
   );
 }
 

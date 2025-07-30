@@ -6,6 +6,7 @@ import { verifyMe } from './features/auth/authSlice';
 
 
 
+
 const Login = lazy(() => import('./pages/auth/Login'));
 const Dashboard = lazy(() => import('./pages/user/Dashboard'));
 const ProtectedRoute = lazy(() => import('./pages/auth/ProtectedRoute'));
@@ -28,6 +29,7 @@ const EmployerPostJob = lazy(() => import('./pages/employer/PostJob'));
 const EmployerApplicants = lazy(() => import('./pages/employer/Applicants'));
 const SavedJobs = lazy(() => import('./pages/user/SavedJobs'));
 const Unauthorized = lazy(() => import('./pages/Unauthorized'));
+const Profile = lazy(() => import('./pages/user/Profile'));
 const App = () => {
   const dispatch = useDispatch();
   const { user } = useSelector(state => state.auth);
@@ -55,6 +57,7 @@ const App = () => {
                 <Route path="jobs/:id" element={<JobDetails />} />
                 <Route path="about" element={<About />} />
                 <Route path="settings" element={<Settings />} />
+                <Route path="settings/profile" element={<Profile />} />
                 <Route path="change-password" element={<ChangePassword />} />
               </Route>
             </Route>

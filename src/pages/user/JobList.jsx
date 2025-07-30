@@ -69,16 +69,21 @@ const JobList = () => {
           : (
             <>
               <div className="space-y-6">
-                {jobList.map((job) => (
-
-                  <JobCard
-                    key={job._id}
-                    job={job}
-                    onSave={() => handleSaveJob(job._id)}
-                    isSaved={savedJobs?.map(job => job._id).includes(job._id)}
-                    onApply={handleApplyJob}
-                  />
-                ))}
+                {jobList.map((job) => {
+                  // Check if user has applied to this job
+                  const appliedJobs = user?.appliedJobs || [];
+                  const isApplied = appliedJobs.includes(job._id);
+                  return (
+                    <JobCard
+                      key={job._id}
+                      job={job}
+                      onSave={() => handleSaveJob(job._id)}
+                      isSaved={savedJobs?.map(job => job._id).includes(job._id)}
+                      onApply={handleApplyJob}
+                      isApplied={isApplied}
+                    />
+                  );
+                })}
               </div>
 
               <div className="flex justify-center py-8 border-t border-gray-200">
