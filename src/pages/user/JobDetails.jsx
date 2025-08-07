@@ -9,59 +9,58 @@ import ApplicantFormModal from '../../components/ApplicantFormModal';
 import { applyToJob } from '../../features/application/applicationSlice';
 import { toast } from 'react-toastify';
 import { formatDate } from '../../services/formetDate';
-
+import JobShareDropdown from '../../components/JobShareDropdown';
 
 import { ChevronDown } from 'lucide-react';
-import JobShareDropdown from '../../components/JobShareDropDown';
 
 function AccordionJobDescription({ description }) {
-  const [open, setOpen] = useState(false);
-  const contentRef = React.useRef(null);
+    const [open, setOpen] = useState(false);
+    const contentRef = React.useRef(null);
 
-  // Keyboard accessibility
-  const handleKeyDown = (e) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      setOpen((prev) => !prev);
-    }
-  };
+    // Keyboard accessibility
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            setOpen((prev) => !prev);
+        }
+    };
 
-  return (
-    <div className="mb-6">
-      <button
-        className={`w-full flex justify-between items-center text-left text-2xl font-bold text-gray-900 border-b border-gray-100 pb-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 transition-colors ${open ? 'mb-2' : 'mb-6'}`}
-        onClick={() => setOpen((prev) => !prev)}
-        aria-expanded={open}
-        aria-controls="job-desc-panel"
-        tabIndex={0}
-        onKeyDown={handleKeyDown}
-        type="button"
-      >
-        <span>
-          Job Description
-          <span className="block text-xs font-normal text-gray-500 mt-1">
-            {open ? 'Click to collapse' : 'Click to expand'}
-          </span>
-        </span>
-        <ChevronDown className={`w-6 h-6 ml-2 transition-transform duration-300 ${open ? 'rotate-180' : ''}`} />
-      </button>
-      <div
-        id="job-desc-panel"
-        ref={contentRef}
-        style={{
-          maxHeight: open ? contentRef.current?.scrollHeight : 0,
-          overflow: 'hidden',
-          transition: 'max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1)',
-        }}
-        aria-hidden={!open}
-        className="prose prose-gray max-w-none"
-      >
-        <div className="py-2">
-          <p className="text-gray-700 leading-relaxed text-base">{description}</p>
+    return (
+        <div className="mb-6">
+            <button
+                className={`w-full flex justify-between items-center text-left text-2xl font-bold text-gray-900 border-b border-gray-100 pb-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 transition-colors ${open ? 'mb-2' : 'mb-6'}`}
+                onClick={() => setOpen((prev) => !prev)}
+                aria-expanded={open}
+                aria-controls="job-desc-panel"
+                tabIndex={0}
+                onKeyDown={handleKeyDown}
+                type="button"
+            >
+                <span>
+                    Job Description
+                    <span className="block text-xs font-normal text-gray-500 mt-1">
+                        {open ? 'Click to collapse' : 'Click to expand'}
+                    </span>
+                </span>
+                <ChevronDown className={`w-6 h-6 ml-2 transition-transform duration-300 ${open ? 'rotate-180' : ''}`} />
+            </button>
+            <div
+                id="job-desc-panel"
+                ref={contentRef}
+                style={{
+                    maxHeight: open ? contentRef.current?.scrollHeight : 0,
+                    overflow: 'hidden',
+                    transition: 'max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1)',
+                }}
+                aria-hidden={!open}
+                className="prose prose-gray max-w-none"
+            >
+                <div className="py-2">
+                    <p className="text-gray-700 leading-relaxed text-base">{description}</p>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  );
+    );
 }
 
 const JobDetails = () => {
@@ -125,7 +124,7 @@ const JobDetails = () => {
 
     const handleSubmit = async (formData) => {
         try {
-            const application = await dispatch(applyToJob({ formData, jobId: id })).unwrap(); 
+            const application = await dispatch(applyToJob({ formData, jobId: id })).unwrap();
             console.log("Success:", application);
             if (application?.success === true) {
                 toast.success("Application submitted successfully!");
@@ -134,7 +133,7 @@ const JobDetails = () => {
             }
         } catch (error) {
             console.error("Error:", error);
-            toast.error(error|| "Failed to apply.");
+            toast.error(error || "Failed to apply.");
         } finally {
             setShowModal(false);
         }
@@ -242,26 +241,26 @@ const JobDetails = () => {
                                     </button>
                                 </div>
                             )} */}
-                            
 
 
-<button
-  className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-all"
-  onClick={() => setShowShare(prev => !prev)}
-  title="Share this job"
->
-  <Share2 className="w-5 h-5" />
-</button>
+
+                            <button
+                                className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-all"
+                                onClick={() => setShowShare(prev => !prev)}
+                                title="Share this job"
+                            >
+                                <Share2 className="w-5 h-5" />
+                            </button>
 
 
-{showShare && (
-  <JobShareDropdown
-    jobTitle={job.title}
-    jobUrl={jobUrl}
-    dropdownRef={shareDropdownRef}
-    onClose={() => setShowShare(false)}
-  />
-)}
+                            {showShare && (
+                                <JobShareDropdown
+                                    jobTitle={job.title}
+                                    jobUrl={jobUrl}
+                                    dropdownRef={shareDropdownRef}
+                                    onClose={() => setShowShare(false)}
+                                />
+                            )}
                             <button
                                 className={`p-2 rounded-lg transition-colors ${isSaved ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-400 hover:bg-gray-200'}`}
                                 onClick={handleSaveJob}

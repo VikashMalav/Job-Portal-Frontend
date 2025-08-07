@@ -1,4 +1,3 @@
-// components/JobShareDropdown.jsx
 import React from 'react';
 import { Facebook, Twitter, Linkedin, Send, Smartphone, Link2 } from 'lucide-react';
 import { toast } from 'react-toastify';
