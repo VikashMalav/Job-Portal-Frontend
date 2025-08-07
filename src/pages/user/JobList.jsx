@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { changePage, getJobs, getSavedJobs, saveJob } from "../../features/Job/jobSlice";
 import JobCard from "../../components/JobCard";
+import ApplicantFormModal from "../../components/ApplicantFormModal";
 import PaginationBar from "../../components/Pagination";
 
 import { toast } from "react-toastify";
@@ -26,6 +27,9 @@ const JobList = () => {
     }
   }, [dispatch, user?._id]);
 
+  const [showModal, setShowModal] = useState(false);
+  const [selectedJobId, setSelectedJobId] = useState(null);
+
   const handleSaveJob = async (jobId) => {
     try {
       await dispatch(saveJob({ jobId, userId: user._id }));
@@ -41,7 +45,20 @@ const JobList = () => {
 
 
   const handleApplyJob = (jobId) => {
-    console.log("Applying to job:", jobId);
+    setSelectedJobId(jobId);
+    setShowModal(true);
+  };
+
+  const handleModalClose = () => {
+    setShowModal(false);
+    setSelectedJobId(null);
+  };
+
+  const handleModalSubmit = async (formData) => {
+    // You can dispatch your applyToJob thunk here if needed
+    // await dispatch(applyToJob({ jobId: selectedJobId, formData }));
+    handleModalClose();
+    toast.success("Application submitted!");
   };
 
   const handleChange = (newPage) => {
@@ -67,7 +84,7 @@ const JobList = () => {
         : loading ?
           (<ProLoader text="Loading jobs..." />)
           : (
-            <>
+            <div>
               <div className="space-y-6">
                 {jobList.map((job) => {
                   // Check if user has applied to this job
@@ -93,7 +110,13 @@ const JobList = () => {
                   onPageChange={handleChange}
                 />
               </div>
-            </>
+              <ApplicantFormModal
+                isOpen={showModal}
+                onClose={handleModalClose}
+                jobTitle={jobList.find(j => j._id === selectedJobId)?.title || ""}
+                onSubmit={handleModalSubmit}
+              />
+            </div>
           )
       }
     </div>

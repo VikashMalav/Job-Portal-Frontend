@@ -35,7 +35,12 @@ function AccordionJobDescription({ description }) {
         onKeyDown={handleKeyDown}
         type="button"
       >
-        <span>Job Description</span>
+        <span>
+          Job Description
+          <span className="block text-xs font-normal text-gray-500 mt-1">
+            {open ? 'Click to collapse' : 'Click to expand'}
+          </span>
+        </span>
         <ChevronDown className={`w-6 h-6 ml-2 transition-transform duration-300 ${open ? 'rotate-180' : ''}`} />
       </button>
       <div
