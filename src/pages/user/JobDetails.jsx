@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { MapPin, Clock, DollarSign, Building2, Globe, Mail, Calendar, Share2, Bookmark, ArrowRight, CheckCircle } from 'lucide-react';
+import { Facebook, Twitter, Linkedin, Send, Smartphone, Link2, MessageSquare } from 'lucide-react';
 import { JobSkeleton } from '../../components/skeleton/JobSkeleton';
 import { useDispatch, useSelector } from 'react-redux';
 import { clearSelectedJob, getJobById, saveJob, getSavedJobs } from '../../features/Job/jobSlice';
@@ -11,6 +12,7 @@ import { formatDate } from '../../services/formetDate';
 
 
 import { ChevronDown } from 'lucide-react';
+import JobShareDropdown from '../../components/JobShareDropDown';
 
 function AccordionJobDescription({ description }) {
   const [open, setOpen] = useState(false);
@@ -64,6 +66,8 @@ function AccordionJobDescription({ description }) {
 
 const JobDetails = () => {
     const [showModal, setShowModal] = useState(false)
+    const [showShare, setShowShare] = useState(false)
+    const shareDropdownRef = React.useRef(null);
     const { id } = useParams();
     console.log(id)
     const dispatch = useDispatch();
@@ -99,6 +103,20 @@ const JobDetails = () => {
         window.scrollTo(0, 0)
     }, [])
 
+    // Close share modal when clicking outside
+    useEffect(() => {
+        if (!showShare) return;
+        function handleClickOutside(event) {
+            if (shareDropdownRef.current && !shareDropdownRef.current.contains(event.target)) {
+                setShowShare(false);
+            }
+        }
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [showShare]);
+
     if (loading) return <JobSkeleton />;
 
     if (!job) return null;
@@ -106,23 +124,77 @@ const JobDetails = () => {
     const checkAlreadyApplied = user?.appliedJobs?.some((id) => id === job._id)
 
     const handleSubmit = async (formData) => {
-    try {
-        const application = await dispatch(applyToJob({ formData, jobId: id })).unwrap(); 
-
-        console.log("Success:", application);
-
-        if (application?.success === true) {
-            toast.success("Application submitted successfully!");
-        } else {
-            toast.info(application.message || "Something happened.");
+        try {
+            const application = await dispatch(applyToJob({ formData, jobId: id })).unwrap(); 
+            console.log("Success:", application);
+            if (application?.success === true) {
+                toast.success("Application submitted successfully!");
+            } else {
+                toast.info(application.message || "Something happened.");
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            toast.error(error|| "Failed to apply.");
+        } finally {
+            setShowModal(false);
         }
-    } catch (error) {
-        console.error("Error:", error);
-        toast.error(error|| "Failed to apply.");
-    } finally {
-        setShowModal(false);
-    }
-};
+    };
+
+    // Share logic
+    const jobUrl = window.location.href;
+    // const jobTitle = job.title;
+    // const jobDesc = job.description;
+    // // Professional share message with clickable link
+    // const shareMessage = `🚀 Check out this job opportunity: ${jobTitle}\nApply here: ${jobUrl}`;
+    // const shareOptions = [
+    //     {
+    //         name: 'WhatsApp',
+    //         url: `https://wa.me/?text=${encodeURIComponent(shareMessage)}`,
+    //         icon: (
+    //             <span style={{ display: 'inline-flex', alignItems: 'center' }}>
+    //               <svg width="22" height="22" viewBox="0 0 32 32" fill="none">
+    //                 <circle cx="16" cy="16" r="16" fill="#25D366"/>
+    //                 <path d="M22.5 18.5c-.3-.2-1.7-.8-2-1-.3-.2-.6-.2-.8.1-.2.2-.7.8-.9 1-.2.2-.4.2-.7.1-.3-.2-1.2-.4-2.3-1.3-.8-.7-1.4-1.5-1.6-1.8-.2-.3-.1-.5.1-.7.1-.1.2-.3.3-.4.1-.1.1-.2.2-.3.1-.2.1-.3 0-.5-.1-.2-.7-1.7-.9-2.3-.2-.6-.4-.5-.6-.5h-.5c-.2 0-.5.1-.7.3-.2.2-.7.7-.7 1.7 0 1 .7 2.1 1.5 3.1 1.2 1.5 2.7 2.3 4.2 2.3.7 0 1.2-.2 1.5-.4.3-.2.5-.5.6-.7.1-.2.1-.4.1-.5 0-.1-.1-.2-.2-.3z" fill="#fff"/>
+    //               </svg>
+    //             </span>
+    //         ),
+    //     },
+    //     {
+    //         name: 'Facebook',
+    //         url: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(jobUrl)}&quote=${encodeURIComponent(shareMessage)}`,
+    //         icon: <Facebook color="#1877F3" size={22} />,
+    //     },
+    //     {
+    //         name: 'Twitter',
+    //         url: `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareMessage)}`,
+    //         icon: <Twitter color="#1DA1F2" size={22} />,
+    //     },
+    //     {
+    //         name: 'LinkedIn',
+    //         url: `https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(jobUrl)}&title=${encodeURIComponent(jobTitle)}&summary=${encodeURIComponent(shareMessage)}`,
+    //         icon: <Linkedin color="#0077B5" size={22} />,
+    //     },
+    //     {
+    //         name: 'Telegram',
+    //         url: `https://t.me/share/url?url=${encodeURIComponent(jobUrl)}&text=${encodeURIComponent(shareMessage)}`,
+    //         icon: <Send color="#0088cc" size={22} />,
+    //     },
+    // ];
+    // const handleWebShare = () => {
+    //     if (navigator.share) {
+    //         navigator.share({
+    //             title: jobTitle,
+    //             text: shareMessage,
+    //             url: jobUrl,
+    //         });
+    //     } else {
+    //         toast.info('Web Share not supported on this device.');
+    //     }
+    // };
+    // const handleCopyLink = () => {
+    //     navigator.clipboard.writeText(shareMessage);
+    //     toast.success('Job link copied!');
+    // };
 
 
     return (
@@ -136,10 +208,60 @@ const JobDetails = () => {
                                 ← Back to Jobs
                             </Link>
                         </div>
-                        <div className="flex items-center space-x-3">
-                            <button className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-all">
+                        <div className="flex items-center space-x-3 relative">
+                            {/* <button className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-all" onClick={() => setShowShare((prev) => !prev)}>
                                 <Share2 className="w-5 h-5" />
                             </button>
+                            {showShare && (
+                                <div ref={shareDropdownRef} className="absolute right-0 top-10 bg-white border border-gray-200 rounded-xl shadow-lg p-4 z-50 flex flex-col min-w-[220px]">
+                                    <div className="font-semibold text-gray-800 mb-2 text-base">Share this job</div>
+                                    {shareOptions.map((opt) => (
+                                        <a
+                                            key={opt.name}
+                                            href={opt.url}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="flex items-center gap-3 px-3 py-2 hover:bg-blue-50 rounded text-gray-700 font-medium transition"
+                                        >
+                                            {opt.icon} <span>{opt.name}</span>
+                                        </a>
+                                    ))}
+                                    <button
+                                        onClick={handleWebShare}
+                                        className="flex items-center gap-3 px-3 py-2 hover:bg-blue-50 rounded text-blue-700 font-medium transition"
+                                    >
+                                        <Smartphone color="#2563eb" size={22} />
+                                        <span>Share via Device</span>
+                                    </button>
+                                    <button
+                                        onClick={handleCopyLink}
+                                        className="flex items-center gap-3 px-3 py-2 hover:bg-blue-50 rounded text-green-700 font-medium transition mt-1"
+                                    >
+                                        <Link2 color="#22c55e" size={22} />
+                                        <span>Copy Link</span>
+                                    </button>
+                                </div>
+                            )} */}
+                            
+
+
+<button
+  className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-all"
+  onClick={() => setShowShare(prev => !prev)}
+  title="Share this job"
+>
+  <Share2 className="w-5 h-5" />
+</button>
+
+
+{showShare && (
+  <JobShareDropdown
+    jobTitle={job.title}
+    jobUrl={jobUrl}
+    dropdownRef={shareDropdownRef}
+    onClose={() => setShowShare(false)}
+  />
+)}
                             <button
                                 className={`p-2 rounded-lg transition-colors ${isSaved ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-400 hover:bg-gray-200'}`}
                                 onClick={handleSaveJob}
