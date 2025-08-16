@@ -70,6 +70,7 @@ const JobDetails = () => {
     const { id } = useParams();
     console.log(id)
     const dispatch = useDispatch();
+    const jobUrl = window.location.href;
 
     const { selectedJob: job, loading, savedJobs = [], toastMessage } = useSelector((state) => state.jobs);
     // Check if job is saved
@@ -139,61 +140,9 @@ const JobDetails = () => {
         }
     };
 
-    // Share logic
-    const jobUrl = window.location.href;
-    // const jobTitle = job.title;
-    // const jobDesc = job.description;
-    // // Professional share message with clickable link
-    // const shareMessage = `🚀 Check out this job opportunity: ${jobTitle}\nApply here: ${jobUrl}`;
-    // const shareOptions = [
-    //     {
-    //         name: 'WhatsApp',
-    //         url: `https://wa.me/?text=${encodeURIComponent(shareMessage)}`,
-    //         icon: (
-    //             <span style={{ display: 'inline-flex', alignItems: 'center' }}>
-    //               <svg width="22" height="22" viewBox="0 0 32 32" fill="none">
-    //                 <circle cx="16" cy="16" r="16" fill="#25D366"/>
-    //                 <path d="M22.5 18.5c-.3-.2-1.7-.8-2-1-.3-.2-.6-.2-.8.1-.2.2-.7.8-.9 1-.2.2-.4.2-.7.1-.3-.2-1.2-.4-2.3-1.3-.8-.7-1.4-1.5-1.6-1.8-.2-.3-.1-.5.1-.7.1-.1.2-.3.3-.4.1-.1.1-.2.2-.3.1-.2.1-.3 0-.5-.1-.2-.7-1.7-.9-2.3-.2-.6-.4-.5-.6-.5h-.5c-.2 0-.5.1-.7.3-.2.2-.7.7-.7 1.7 0 1 .7 2.1 1.5 3.1 1.2 1.5 2.7 2.3 4.2 2.3.7 0 1.2-.2 1.5-.4.3-.2.5-.5.6-.7.1-.2.1-.4.1-.5 0-.1-.1-.2-.2-.3z" fill="#fff"/>
-    //               </svg>
-    //             </span>
-    //         ),
-    //     },
-    //     {
-    //         name: 'Facebook',
-    //         url: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(jobUrl)}&quote=${encodeURIComponent(shareMessage)}`,
-    //         icon: <Facebook color="#1877F3" size={22} />,
-    //     },
-    //     {
-    //         name: 'Twitter',
-    //         url: `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareMessage)}`,
-    //         icon: <Twitter color="#1DA1F2" size={22} />,
-    //     },
-    //     {
-    //         name: 'LinkedIn',
-    //         url: `https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(jobUrl)}&title=${encodeURIComponent(jobTitle)}&summary=${encodeURIComponent(shareMessage)}`,
-    //         icon: <Linkedin color="#0077B5" size={22} />,
-    //     },
-    //     {
-    //         name: 'Telegram',
-    //         url: `https://t.me/share/url?url=${encodeURIComponent(jobUrl)}&text=${encodeURIComponent(shareMessage)}`,
-    //         icon: <Send color="#0088cc" size={22} />,
-    //     },
-    // ];
-    // const handleWebShare = () => {
-    //     if (navigator.share) {
-    //         navigator.share({
-    //             title: jobTitle,
-    //             text: shareMessage,
-    //             url: jobUrl,
-    //         });
-    //     } else {
-    //         toast.info('Web Share not supported on this device.');
-    //     }
-    // };
-    // const handleCopyLink = () => {
-    //     navigator.clipboard.writeText(shareMessage);
-    //     toast.success('Job link copied!');
-    // };
+
+
+
 
 
     return (

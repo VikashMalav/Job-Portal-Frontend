@@ -6,7 +6,8 @@ export const fetchEmployerJobs = createAsyncThunk('employerJobs/fetchJobs', asyn
     const response = await axiosInstance.get(`/employer/jobs?employerId=${employerId}`);
     return response.data.data;
   } catch (error) {
-    return rejectWithValue(error.response?.data || error.message);
+    console.log("error >>>>>>>>>", error);
+    return rejectWithValue(error.response?.data || error.message || 'Failed to fetch jobs');
   }
 });
 
